@@ -6,12 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -40,18 +45,21 @@ public class AdminController {
         return "user-add";
     }
 
-    @PostMapping("/add")
-    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult result) {
+    @PostMapping("/save")
+    public String addUser(@ModelAttribute("newUser") @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return "user-add";
+            return "index2";
         }
         // проверка на имейл
         Optional<User> userWithSameEmail = userService.findByEmail(user.getEmail());
         if (userWithSameEmail.isPresent()) {
-            return "user-add";
+            result.rejectValue("email", "error.newUser", "Этот email уже используется другим пользователем.");
+            return "index2";
         }
+
         // Проверка: если роли не выбраны, добавляется роль по умолчанию
-        userService.save(user);
+        System.out.println(user.getRoles());
+//        userService.save(user);
         return "redirect:/admin";
     }
 
