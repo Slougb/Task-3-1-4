@@ -29,7 +29,8 @@ public class AdminController {
     @GetMapping
     public String listUsers(ModelMap model) {
         model.addAttribute("users", userService.listUsers());
-        return "user-list";
+        model.addAttribute("newUser", new User());
+        return "index2";
     }
 
     @GetMapping("/add")
