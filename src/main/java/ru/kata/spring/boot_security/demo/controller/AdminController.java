@@ -12,10 +12,8 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,8 +31,10 @@ public class AdminController {
 
     @GetMapping
     public String listUsers(ModelMap model) {
+
         model.addAttribute("users", userService.listUsers());
         model.addAttribute("newUser", new User());
+        model.addAttribute("allRoles", roleService.findAll());
         return "index2";
     }
 
@@ -46,7 +46,8 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public String addUser(@ModelAttribute("newUser") @Valid User user, BindingResult result) {
+    public String addUser(@ModelAttribute("newUser") @Valid User user,  BindingResult result) {
+
         if (result.hasErrors()) {
             return "index2";
         }
@@ -56,10 +57,7 @@ public class AdminController {
             result.rejectValue("email", "error.newUser", "Этот email уже используется другим пользователем.");
             return "index2";
         }
-
-        // Проверка: если роли не выбраны, добавляется роль по умолчанию
-        System.out.println(user.getRoles());
-//        userService.save(user);
+        userService.save(user);
         return "redirect:/admin";
     }
 
