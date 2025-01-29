@@ -2,19 +2,21 @@ package ru.kata.spring.boot_security.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.PersonDetails;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
-import java.sql.SQLOutput;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 
 @Controller
@@ -31,19 +33,15 @@ public class AdminController {
 
     @GetMapping
     public String listUsers(ModelMap model) {
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        model.addAttribute("currentUser", personDetails.getUser());
         model.addAttribute("users", userService.listUsers());
         model.addAttribute("newUser", new User());
         model.addAttribute("allRoles", roleService.findAll());
         return "index2";
     }
 
-    @GetMapping("/add")
-    public String addUserForm(ModelMap model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("allRoles", roleService.findAll());
-        return "user-add";
-    }
 
     @PostMapping("/save")
     public String addUser(@ModelAttribute("newUser") @Valid User user,  BindingResult result) {

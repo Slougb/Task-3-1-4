@@ -11,7 +11,6 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 
 @Controller
-
 public class UserController {
 
     private final UserService userService;
@@ -25,7 +24,7 @@ public class UserController {
     public String userPage( Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        model.addAttribute("userDetails", personDetails);
+        model.addAttribute("user", personDetails.getUser());
         return "user";
     }
 }
