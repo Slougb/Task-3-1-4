@@ -61,32 +61,25 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/edit")
-    public String editUserForm(@RequestParam("id") int id, ModelMap model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
-        model.addAttribute("allRoles", roleService.findAll());
-        return "user-edit";
-    }
+    @PatchMapping("/edit")
+    public String editUserForm(@ModelAttribute("newUser") @Valid User user,  BindingResult result) {
 
-    @PostMapping("/edit")
-    public String editUser(@RequestParam("id") int id, @ModelAttribute("user") @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
-            return "user-edit";
+            return "index2";
         }
         // проверка на имейл
         Optional<User> userWithSameEmail = userService.findByEmail(user.getEmail());
-        if (userWithSameEmail.isPresent() && userWithSameEmail.get().getId() != id) {
+        if (userWithSameEmail.isPresent() && !user.getEmail().equals(userWithSameEmail.get().getEmail())) {
             // проверяем, что email не совпадает с текущим пользователем
             result.rejectValue("email", "error.user", "Этот email уже используется другим пользователем.");
-            return "user-edit";
+            return "index2";
         }
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/delete")
-    public String deleteUser(@RequestParam("id") int id) {
+    @DeleteMapping("/delete")
+    public String deleteUser(@RequestParam("id") Long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }

@@ -16,7 +16,7 @@ public class User {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private int id;
+   private long id;
 
    @Pattern(regexp = "^[А-ЯA-Z][а-яa-z]+$", message = "некорректный ввод Имени")
    @NotEmpty(message = "Имя не может быть пустым")
@@ -62,7 +62,7 @@ public class User {
       this.roles = roles;
    }
 
-   public int getId() {
+   public long getId() {
       return id;
    }
 
