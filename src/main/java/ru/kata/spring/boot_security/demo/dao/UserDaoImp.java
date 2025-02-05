@@ -15,8 +15,9 @@ public class UserDaoImp implements UserDao {
    private EntityManager entityManager;
 
    @Override
-   public void save(User user) {
+   public User save(User user) {
       entityManager.persist(user);
+      return user;
    }
 
    @Override
@@ -32,8 +33,9 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   public void updateUser(User user) {
+   public User updateUser(User user) {
       entityManager.merge(user);
+      return user;
    }
 
    @Override

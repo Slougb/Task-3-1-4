@@ -6,9 +6,9 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> listUsers();
-    void save(User user);
+    User save(User user);
     User getUser(long id);
     void deleteUser(long id);
-    void updateUser(User user);
+    User updateUser(User user);
     Optional<User> findByEmail(String email);
 }

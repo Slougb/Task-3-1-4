@@ -33,10 +33,11 @@ public class UserServiceImp implements UserService {
 
    @Transactional
    @Override
-   public void save(User user) {
+   public User save(User user) {
       String encodedPassword = passwordEncoder.encode(user.getPassword());
       user.setPassword(encodedPassword);
       userDao.save(user);
+      return user;
    }
 
    @Transactional(readOnly = true)
@@ -59,8 +60,8 @@ public class UserServiceImp implements UserService {
 
    @Transactional
    @Override
-   public void updateUser(User user) {
-      userDao.updateUser(user);
+   public User updateUser(User user) {
+      return userDao.updateUser(user);
    }
 
    @Override

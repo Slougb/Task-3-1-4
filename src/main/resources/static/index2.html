@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Шапка, боковое меню и т.д. -->
+<nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-text text-light" id="currentUserSpan"></span>
+    <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+</nav>
+
+<div class="container mt-4">
+    <!-- Вкладки -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all-users">Users Table</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#new-user">New User</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-4">
+        <!-- Таблица пользователей -->
+        <div class="tab-pane fade show active" id="all-users">
+            <h3>All Users</h3>
+            <table class="table table-bordered">
+                <thead class="table-light">
+                <tr>
+                    <th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Roles</th><th>Edit</th><th>Delete</th>
+                </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                <!-- JS добавит строки -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Форма создания нового пользователя -->
+        <div class="tab-pane fade" id="new-user">
+            <h3>Create New User</h3>
+            <form id="createUserForm">
+                <div class="mb-3">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" id="firstName" required>
+                </div>
+                <div class="mb-3">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" id="lastName" required>
+                </div>
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" class="form-control" id="emailNew" required>
+                </div>
+                <div class="mb-3">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="passwordNew" required>
+                </div>
+                <div class="mb-3">
+                    <label>Roles:</label><br>
+                    <input type="checkbox" id="adminCheck" value="ADMIN"> Admin <br>
+                    <input type="checkbox" id="userCheck" value="USER"> User
+                </div>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка Edit -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editId">
+                    <div class="mb-3">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" id="editEmail" required>
+                    </div>
+                    <input type="hidden" id="editPassword">
+                    <div class="mb-3">
+                        <label>Roles:</label><br>
+                        <input type="checkbox" id="editAdminCheck" value="ADMIN"> Admin <br>
+                        <input type="checkbox" id="editUserCheck" value="USER"> User
+                    </div>
+                    <!-- ВАЖНО: нет data-bs-dismiss="modal" -->
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модалка Delete -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete user</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure to delete user <strong id="deleteUserName"></strong>?</p>
+                <p>ID: <span id="deleteUserId"></span></p>
+            </div>
+            <div class="modal-footer">
+                <!-- Cancel закрывает модалку -->
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <!-- Кнопка удаления -->
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>
