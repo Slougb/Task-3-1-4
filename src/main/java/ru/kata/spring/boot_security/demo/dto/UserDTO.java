@@ -1,6 +1,11 @@
 package ru.kata.spring.boot_security.demo.dto;
 
-public class UserDto {
+import ru.kata.spring.boot_security.demo.model.Role;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class UserDTO {
 
     private long id;
 
@@ -11,6 +16,8 @@ public class UserDto {
     private String email;
 
     private String password;
+
+    private Set<Role> roles = new HashSet<>();
 
     public long getId() {
         return id;
@@ -52,5 +59,11 @@ public class UserDto {
         this.password = password;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
 
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

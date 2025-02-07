@@ -3,6 +3,8 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
+import ru.kata.spring.boot_security.demo.dto.UserDTOMapper;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -15,35 +17,32 @@ public class AdminRestController {
 
     private final UserService userService;
 
+    private final UserDTOMapper userDTOMapper;
+
     @Autowired
-    public AdminRestController(UserService userService) {
+    public AdminRestController(UserService userService , UserDTOMapper userDTOMapper) {
         this.userService = userService;
+        this.userDTOMapper = userDTOMapper;
     }
 
 
     @GetMapping("/users")
-    public List<User> getAllUsers() {
-        List<User> allUsers = userService.listUsers();
-        return allUsers;
+    public List<UserDTO> getAllUsers() {
+        return userService.listUsers().stream().map(userDTOMapper::toUserDto).toList();
     }
 
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody  User user) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody  User user) {
         userService.save(user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userDTOMapper.toUserDto(user));
     }
 
 
     @PatchMapping("/users")
-    public ResponseEntity<User> updateUser(@RequestBody User userDto) {
-        User userFromDb = userService.getUser(userDto.getId());
-        userFromDb.setFirstName(userDto.getFirstName());
-        userFromDb.setLastName(userDto.getLastName());
-        userFromDb.setEmail(userDto.getEmail());
-        userFromDb.setRoles(userDto.getRoles());
-        userService.updateUser(userFromDb);
-        return ResponseEntity.ok(userFromDb);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return ResponseEntity.ok(userDTOMapper.toUserDto(user));
     }
 
     @DeleteMapping("/users")

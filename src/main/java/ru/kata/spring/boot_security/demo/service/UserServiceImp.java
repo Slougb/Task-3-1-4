@@ -19,7 +19,7 @@ public class UserServiceImp implements UserService {
    private final PasswordEncoder passwordEncoder;
 
 
-   private UserDao userDao;
+   private final UserDao userDao;
 
 
 
@@ -57,13 +57,10 @@ public class UserServiceImp implements UserService {
 
    @Transactional
    @Override
-   public User updateUser(User user) {
-      return userDao.updateUser(user);
+   public User updateUser(User editUser) {
+      User oldUser = userDao.getUser(editUser.getId());
+      editUser.setPassword(oldUser.getPassword());
+      return userDao.updateUser(editUser);
    }
 
-//   @Override
-//   public Optional<User> findByEmail(String email) {
-//      return userRepository.findByEmail(email);
-//   }
-//
 }
