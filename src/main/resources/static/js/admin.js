@@ -56,8 +56,8 @@
     const adminChecked = document.getElementById('adminCheck').checked;
     const userChecked = document.getElementById('userCheck').checked;
     const roles = [];
-    if (adminChecked) roles.push({ name: 'ADMIN' });
-    if (userChecked) roles.push({ name: 'USER' });
+    if (adminChecked) roles.push({ id: 1 , name: 'ROLE_ADMIN' });
+    if (userChecked) roles.push({ id: 2 , name: 'ROLE_USER' });
 
     const newUser = { firstName, lastName, email, password, roles };
 

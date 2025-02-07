@@ -22,22 +22,19 @@ public class UserServiceImp implements UserService {
    private UserDao userDao;
 
 
-   private UserRepository userRepository;
 
    @Autowired
    public UserServiceImp(PasswordEncoder passwordEncoder, UserDao userDao, UserRepository userRepository) {
       this.passwordEncoder = passwordEncoder;
       this.userDao = userDao;
-      this.userRepository = userRepository;
    }
 
    @Transactional
    @Override
-   public User save(User user) {
+   public void save(User user) {
       String encodedPassword = passwordEncoder.encode(user.getPassword());
       user.setPassword(encodedPassword);
       userDao.save(user);
-      return user;
    }
 
    @Transactional(readOnly = true)
@@ -64,8 +61,9 @@ public class UserServiceImp implements UserService {
       return userDao.updateUser(user);
    }
 
-   @Override
-   public Optional<User> findByEmail(String email) {
-      return userRepository.findByEmail(email);
-   }
+//   @Override
+//   public Optional<User> findByEmail(String email) {
+//      return userRepository.findByEmail(email);
+//   }
+//
 }
